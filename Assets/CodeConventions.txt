@@ -1,0 +1,59 @@
+Code conventions:
+
+Pacal casing (one CAPITAL letter) for:
+- Functions
+- Classes
+
+Camel casing for:
+- parameters
+- properties (languague feature) (get; set)
+
+Example
+Private int someInt
+
+Public int SomeInt
+{
+Get: protected set;
+}
+
+Brackets{}
+On next lines
+Parameters met _
+Example:
+Private void Methodname(bool _Param)
+{
+
+}
+
+Booleans with is and can
+Example: canWalk, Ismoving
+
+Coding comments are in english
+
+Code ordering:
+
+Using statements
+Variable first than methods
+Variable order:
+Public 
+Protected
+Private
+
+Function ordering
+Unity handles (update,start,awake)
+Public
+Protected
+Private
+
+Every function needs a private protected and public (no void without accses modifier!)
+Even start and loop….
+
+Multiple classes in 1 one file is allowed
+But defining the class should be in the main class of the script
+Alternatively use a struct.
+
+Tips and tricks
+- Goto/jumps are functions that go to other locations of code.
+- Setting properties to a protected protects the value from being set from else were.
+
+
