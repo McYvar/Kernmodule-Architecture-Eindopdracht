@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05fd94718dac14c409114a9698ae60e3, type: 3}
   m_Name: RedEnemy
   m_EditorClassIdentifier: 
-  enemyName: 
-  damage: 0
-  material: {fileID: 0}
+  enemyObject: {fileID: 5742186477357449735, guid: bd0bb4470dfadf64d81cc878c2963b11, type: 3}
+  enemyName: Red
+  damage: 10
+  speed: 1
+  hp: 10

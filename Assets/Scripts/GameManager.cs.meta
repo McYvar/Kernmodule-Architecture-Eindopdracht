@@ -3,7 +3,9 @@ guid: f4ac669b61181a24b9ad16cfa2f4a48c
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - actor: {instanceID: 0}
+  - scriptableEnemy1: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
