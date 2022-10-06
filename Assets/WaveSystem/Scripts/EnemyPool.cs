@@ -7,7 +7,7 @@ public class EnemyPool
     public Enemy[] enemies;
 
     // When creating a pool, every enemy in the pool (depending on the given pool size) should be instantiated (since we only get to use one monobehaviour)
-    public EnemyPool(ScriptableEnemy _scriptableEnemy, int _poolSize, Vector3 _offScreenLocation)
+    public EnemyPool(SO_BaseEnemyProperties _scriptableEnemy, int _poolSize, Vector3 _offScreenLocation)
     {
         enemies = new Enemy[_poolSize];
 
@@ -17,7 +17,7 @@ public class EnemyPool
         }
     }
 
-    public void Init(ScriptableEnemy _scriptableEnemy, Vector3[] _spawnPoints)
+    public void Init(SO_BaseEnemyProperties _scriptableEnemy, Vector3[] _spawnPoints)
     {
         for (int i = 0; i < enemies.Length; i++)
         {

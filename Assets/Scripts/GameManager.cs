@@ -11,12 +11,15 @@ public class GameManager : MonoBehaviour
     // Enemy spawning stuff
     [Space(20), Header("Enemy management"), Space(5)]
     [SerializeField] private int enemyPoolSize;
-    [SerializeField] private ScriptableEnemy scriptableEnemy1;
+    [SerializeField] private SO_BaseEnemyProperties scriptableEnemy1;
 
     [SerializeField] Vector3 offscreenLocation;
     [SerializeField] Vector3[] enemySpawnPoints;
 
     private EnemyPool enemyPool;
+
+    [Space(5)]
+    public WaveCreator[] waveCreator;
 
 
 
@@ -68,5 +71,4 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F)) enemyPool.Init(scriptableEnemy1, enemySpawnPoints);
 
     }
-
 }

@@ -12,7 +12,7 @@ public class Enemy
     private int hp;
 
     // Upon creating a new enemy, its hp is set to 0 so it won't be active until initialization
-    public Enemy(ScriptableEnemy _scriptableEnemy, Vector3 _offScreenLocation)
+    public Enemy(SO_BaseEnemyProperties _scriptableEnemy, Vector3 _offScreenLocation)
     {
         offScreenLocation = _offScreenLocation;
         enemyObject = Object.Instantiate(_scriptableEnemy.enemyObject, offScreenLocation, Quaternion.identity);
@@ -20,7 +20,7 @@ public class Enemy
         hp = 0;
     }
 
-    public void Init(ScriptableEnemy _scriptableEnemy, Vector3 _spawnpoint)
+    public void Init(SO_BaseEnemyProperties _scriptableEnemy, Vector3 _spawnpoint)
     {
         enemyObject.name = _scriptableEnemy.enemyName;
         enemyObject.transform.position = _spawnpoint;
