@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-	InputHandler InputSystem;
+	CommandSystem CommandSystem;
 	public GameObject actor;
-	WASDCommands command = new WASDCommands();
+	
     // Start is called before the first frame update
     void Start()
     {
-	    InputSystem = new InputHandler(actor);
-	    InputSystem.SetHandler(command);
+        CommandSystem = new CommandSystem(actor);
+        Icommand ComMsg = new PlayerCommand(actor.transform);
+        CommandSystem.SetHandler(ComMsg);
     }
 
     // Update is called once per frame
@@ -26,7 +27,7 @@ public class GameManager : MonoBehaviour
 		Event e = Event.current;
 		if (e.isKey)
 		{
-			InputSystem.HandleInput(e.keyCode);
+			CommandSystem.HandleInput(e.keyCode);
 		}
 	}
 }
