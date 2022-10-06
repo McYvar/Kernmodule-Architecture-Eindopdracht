@@ -2,16 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KeyCommand
-{
-	public KeyCode key;
-	public Icommand command;
-}
-
 public class PlayerCommand:Icommand
 {
     Transform Owner;
     Transform[] Udders;
+    List<Icommand> commandlist;
     public PlayerCommand(Transform _owner)
     {
         Owner = _owner;
@@ -25,14 +20,13 @@ public class PlayerCommand:Icommand
       
     public void Execute()
     {
-        Debug.Log("");
+        Debug.Log("implement feutures!");
     }
     public void Undo()
     {
         Debug.Log("");
     }
 }
-
 public class ArrowCommands : Icommand
 {
     public void Execute()
