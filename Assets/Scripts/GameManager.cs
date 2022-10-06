@@ -10,24 +10,30 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        CommandSystem = new CommandSystem(actor);
+       // CommandSystem = new CommandSystem(actor);
         Icommand ComMsg = new PlayerCommand(actor.transform);
-        CommandSystem.SetHandler(ComMsg);
+        CommandSystem.Instance.SetHandler(ComMsg);
+        Icommand ComMsg2 = new keymashCommand();
+       CommandSystem.Instance.AddCommand(ComMsg2,KeyCode.S);
     }
 
     // Update is called once per frame
     void Update()
     {
-	   
+	   if(Input.GetMouseButtonDown(0)) //convert mouse input to keycodes
+        {
+            CommandSystem.Instance.HandleInput(KeyCode.Mouse0);
+        }
     }
     
     
-	void OnGUI()
+	void OnGUI() //currently used to update keybindings, no mouse support
 	{
 		Event e = Event.current;
 		if (e.isKey)
 		{
-			CommandSystem.HandleInput(e.keyCode);
+           
+			CommandSystem.Instance.HandleInput(e.keyCode);
 		}
 	}
 }

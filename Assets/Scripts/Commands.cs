@@ -17,10 +17,30 @@ public class PlayerCommand:Icommand
             Udders[i] = udder;
         }
     }
-      
+    public PlayerCommand()
+    {
+     
+    }
+    //public void ExecuteWithCommand(Icommand _package)
+    //{
+    //    if()
+    //}
     public void Execute()
     {
         Debug.Log("implement feutures!");
+        
+    }
+    public void Undo()
+    {
+        Debug.Log("");
+    }
+}
+public class keymashCommand: Icommand
+    {
+    public void Execute()
+    {
+        Debug.Log("");
+
     }
     public void Undo()
     {
