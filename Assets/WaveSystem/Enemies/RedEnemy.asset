@@ -15,5 +15,5 @@ MonoBehaviour:
   enemyObject: {fileID: 5742186477357449735, guid: bd0bb4470dfadf64d81cc878c2963b11, type: 3}
   enemyName: Red
   damage: 10
-  speed: 1
+  speed: 6
   hp: 10

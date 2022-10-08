@@ -5,9 +5,11 @@ using UnityEngine;
 public class EnemyPool
 {
     public Enemy[] enemies;
+    private List<int> ListForSpawningRandomEnemies;
 
     public EnemyPool(List<Waves> _allWaves, Vector3 _offScreenLocation)
     {
+        ListForSpawningRandomEnemies = new List<int>();
         Dictionary<SO_BaseEnemyProperties, int> tempDictForComparisons = new Dictionary<SO_BaseEnemyProperties, int>();
 
         for (int i = 0; i < _allWaves.Count; i++)
@@ -65,5 +67,39 @@ public class EnemyPool
     {
         int pointIndex = Random.Range(0, _spawnPoints.Length);
         return _spawnPoints[pointIndex];
+    }
+
+    // Function that re-iterates till finding a random available enemy
+    public void SpawnRandomFromPool(Vector3[] _spawnPoints, int _overflowPrevention)
+    {
+        _overflowPrevention++;
+        Debug.Log(_overflowPrevention);
+        if (_overflowPrevention > enemies.Length)
+        {
+            ListForSpawningRandomEnemies.Clear();
+            return;
+        }
+        int random = GetRandomExcluding(0, enemies.Length, ListForSpawningRandomEnemies);
+        ListForSpawningRandomEnemies.Add(random);
+        if (enemies[random].inUse())
+        {
+            SpawnRandomFromPool(_spawnPoints, _overflowPrevention);
+        }
+        else
+        {
+            enemies[random].Init(SpawnPoint(_spawnPoints));
+            ListForSpawningRandomEnemies.Clear();
+        }
+    }
+
+    // Also a re-iterating function that recieves a list of integers that are excluded from being picked at random in range
+    public int GetRandomExcluding(int _minInclusive, int _maxExclusive, List<int> _excludingIntegers)
+    {
+        int temp = Random.Range(_minInclusive, _maxExclusive);
+        if (_excludingIntegers.Contains(temp))
+        {
+            return GetRandomExcluding(_minInclusive, _maxExclusive, _excludingIntegers);
+        }
+        else return temp;
     }
 }

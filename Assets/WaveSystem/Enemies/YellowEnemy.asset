@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyObject: {fileID: 1176046735549976908, guid: 243e2986b050f7143abf726736a8c3b3, type: 3}
   enemyName: Yellow
-  damage: 20
-  speed: 2
-  hp: 20
+  damage: 40
+  speed: 3
+  hp: 100

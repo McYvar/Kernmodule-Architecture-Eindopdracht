@@ -36,17 +36,18 @@ public class Enemy
     }
 
     // Enemy behaviour() gets called every frame for each enemy
-    public void behaviour(Transform _target)
+    public bool behaviour(Transform _target)
     {
         if (!inUse())
         {
             enemyObject.name = name + " (inactive)";
             enemyObject.transform.position = offScreenLocation;
-            return;
+            return false;
         }
 
         enemyObject.name = name + " (active)";
         enemyObject.transform.position += (_target.position - enemyObject.transform.position).normalized * speed * Time.deltaTime;
+        return true;
     }
 
     public bool inUse()
@@ -62,7 +63,17 @@ public class Enemy
     public void TakeDamage(int _damage)
     {
         hp -= _damage;
-        Debug.Log(enemyObject.name + " took " + _damage + " damage!");
+    }
+
+    // Deals damage when the enemy gets close to a given object transform, then sets own hp to 0
+    public int DealDamage(Transform obj)
+    {
+        if (Vector3.Distance(enemyObject.transform.position, obj.position) < 1)
+        {
+            hp = 0;
+            return damage;
+        }
+        return 0;
     }
 
     // I don't know about this yet...
