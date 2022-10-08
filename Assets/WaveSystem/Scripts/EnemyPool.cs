@@ -73,7 +73,6 @@ public class EnemyPool
     public void SpawnRandomFromPool(Vector3[] _spawnPoints, int _overflowPrevention)
     {
         _overflowPrevention++;
-        Debug.Log(_overflowPrevention);
         if (_overflowPrevention > enemies.Length)
         {
             ListForSpawningRandomEnemies.Clear();
