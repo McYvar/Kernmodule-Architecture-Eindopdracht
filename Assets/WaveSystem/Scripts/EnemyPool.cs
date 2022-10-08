@@ -1,30 +1,61 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class EnemyPool
 {
     public Enemy[] enemies;
 
-    // When creating a pool, every enemy in the pool (depending on the given pool size) should be instantiated (since we only get to use one monobehaviour)
-    public EnemyPool(SO_BaseEnemyProperties _scriptableEnemy, int _poolSize, Vector3 _offScreenLocation)
+    public EnemyPool(List<Waves> _allWaves, Vector3 _offScreenLocation)
     {
-        enemies = new Enemy[_poolSize];
+        Dictionary<SO_BaseEnemyProperties, int> tempDictForComparisons = new Dictionary<SO_BaseEnemyProperties, int>();
 
-        for (int i = 0; i < enemies.Length; i++)
+        for (int i = 0; i < _allWaves.Count; i++)
         {
-            enemies[i] = new Enemy(_scriptableEnemy, _offScreenLocation);
+            List<EnemyStruct> currentEnemyTypeList = _allWaves[i].enemyTypeAndAmount;
+            for (int j = 0; j < currentEnemyTypeList.Count; j++)
+            {
+                if (tempDictForComparisons.ContainsKey(currentEnemyTypeList[j].enemyProperties))
+                {
+                    if (tempDictForComparisons[currentEnemyTypeList[j].enemyProperties] < currentEnemyTypeList[j].amount)
+                        tempDictForComparisons[currentEnemyTypeList[j].enemyProperties] = currentEnemyTypeList[j].amount;
+                }
+                else
+                {
+                    tempDictForComparisons.Add(currentEnemyTypeList[j].enemyProperties, currentEnemyTypeList[j].amount);
+                }
+            }
+        }
+        int poolSize = 0;
+        foreach (SO_BaseEnemyProperties enemyProperties in tempDictForComparisons.Keys)
+        {
+            poolSize += tempDictForComparisons[enemyProperties];
+        }
+        enemies = new Enemy[poolSize];
+
+        int iterator = 0;
+
+        foreach (SO_BaseEnemyProperties enemyProperty in tempDictForComparisons.Keys)
+        {
+            for (int i = 0; i < tempDictForComparisons[enemyProperty]; i++)
+            {
+                enemies[iterator] = new Enemy(enemyProperty, _offScreenLocation);
+                iterator++;
+            }
         }
     }
 
-    public void Init(SO_BaseEnemyProperties _scriptableEnemy, Vector3[] _spawnPoints)
+    public void Init(SO_BaseEnemyProperties _enemyProperties, Vector3[] _spawnPoints)
     {
         for (int i = 0; i < enemies.Length; i++)
         {
             if (!enemies[i].inUse())
             {
-                enemies[i].Init(_scriptableEnemy, SpawnPoint(_spawnPoints));
-                return;
+                if (enemies[i].enemyProperties == _enemyProperties)
+                {
+                    enemies[i].Init(SpawnPoint(_spawnPoints));
+                    return;
+                }
             }
         }
         Debug.Log("no enemy was available");

@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8838c9ccc4dbefd4d82b169dc464fec7, type: 3}
-  m_Name: RedEnemy
+  m_Name: BlueEnemy
   m_EditorClassIdentifier: 
-  enemyObject: {fileID: 5742186477357449735, guid: bd0bb4470dfadf64d81cc878c2963b11, type: 3}
-  enemyName: Red
-  damage: 10
-  speed: 1
-  hp: 10
+  enemyObject: {fileID: 3146190384237791376, guid: 7fdfa4554a020e6458d72eda0cd3e0ba, type: 3}
+  enemyName: Blue
+  damage: 50
+  speed: 5
+  hp: 50

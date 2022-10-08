@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 using UnityEngine.EventSystems;
 
 public class GameManager : MonoBehaviour
@@ -10,8 +11,6 @@ public class GameManager : MonoBehaviour
 
     // Enemy spawning stuff
     [Space(20), Header("Enemy management"), Space(5)]
-    [SerializeField] private int enemyPoolSize;
-    [SerializeField] private SO_BaseEnemyProperties scriptableEnemy1;
 
     [SerializeField] Vector3 offscreenLocation;
     [SerializeField] Vector3[] enemySpawnPoints;
@@ -19,9 +18,8 @@ public class GameManager : MonoBehaviour
     private EnemyPool enemyPool;
 
     [Space(5)]
-    public WaveCreator[] waveCreator;
-
-
+    public List<Waves> waves;
+    [SerializeField] private int currentWave;
 
     // Start is called before the first frame update
     void Start()
@@ -29,7 +27,8 @@ public class GameManager : MonoBehaviour
         InputSystem = new InputHandler(actor);
         InputSystem.SetHandler(command);
 
-        enemyPool = new EnemyPool(scriptableEnemy1, enemyPoolSize, offscreenLocation);
+        enemyPool = new EnemyPool(waves, offscreenLocation);
+        //currentWave = 0;
     }
 
     // Update is called once per frame
@@ -37,7 +36,6 @@ public class GameManager : MonoBehaviour
     {
         EnemyUpdate();
     }
-
 
     void OnGUI()
     {
@@ -47,7 +45,6 @@ public class GameManager : MonoBehaviour
             InputSystem.HandleInput(e.keyCode);
         }
     }
-
 
     private void OnDrawGizmos()
     {
@@ -66,9 +63,18 @@ public class GameManager : MonoBehaviour
         foreach (Enemy enemy in enemyPool.enemies)
         {
             enemy.behaviour(actor.transform);
+
+
+            // Temp till collision is implemented
+            if (Input.GetKeyDown(KeyCode.Space)) enemy.TakeDamage(100);
         }
 
-        if (Input.GetKeyDown(KeyCode.F)) enemyPool.Init(scriptableEnemy1, enemySpawnPoints);
-
+        // Temp till automazation
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            if (currentWave > waves.Count) return;
+            waves[currentWave].SpawnWave(enemyPool, enemySpawnPoints);
+            currentWave++;
+        }
     }
 }
