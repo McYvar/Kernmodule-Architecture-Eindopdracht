@@ -4,13 +4,16 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-	CommandSystem CommandSystem;
+    StateMachine<int> EnvoirmentMachine = new StateMachine<int>();
+    public CommandSystem CommandSystem;
 	public GameObject actor;
 	
     // Start is called before the first frame update
     void Start()
     {
-       // CommandSystem = new CommandSystem(actor);
+        State<int> state = new State<int>(0,"Wave1");
+        EnvoirmentMachine.AddState(state);
+        // CommandSystem = new CommandSystem(actor);
         ICommand ComMsg = new PlayerCommand(actor.transform);
         CommandSystem.Instance.SetHandler(ComMsg);
         ICommand space = new keyTransformCommand(KeyCode.Space,Vector3.up, actor.transform);
@@ -24,6 +27,7 @@ public class GameManager : MonoBehaviour
         {
             CommandSystem.Instance.HandleInput(KeyCode.Mouse0);
         }
+        EnvoirmentMachine.Update();
     }
     
     
