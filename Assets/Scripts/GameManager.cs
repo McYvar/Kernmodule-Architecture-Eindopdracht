@@ -7,7 +7,6 @@ public class GameManager : MonoBehaviour
 	public GameObject actor;
 	
     InputHandler InputSystem;
-    public GameObject actor;
     WASDCommands command = new WASDCommands();
 
 
@@ -64,15 +63,6 @@ public class GameManager : MonoBehaviour
 			CommandSystem.Instance.HandleInput(e.keyCode);
 		}
 	}
-
-    void OnGUI()
-    {
-        Event e = Event.current;
-        if (e.isKey)
-        {
-            InputSystem.HandleInput(e.keyCode);
-        }
-    }
 
     private void OnDrawGizmos()
     {
