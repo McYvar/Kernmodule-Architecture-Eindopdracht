@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+	CommandSystem CommandSystem;
+	public GameObject actor;
+	
     InputHandler InputSystem;
     public GameObject actor;
     WASDCommands command = new WASDCommands();
@@ -28,6 +31,11 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+       // CommandSystem = new CommandSystem(actor);
+        ICommand ComMsg = new PlayerCommand(actor.transform);
+        CommandSystem.Instance.SetHandler(ComMsg);
+        ICommand space = new keyTransformCommand(KeyCode.Space,Vector3.up, actor.transform);
+       CommandSystem.Instance.AddCommand(space, KeyCode.Space);
         InputSystem = new InputHandler(actor);
         InputSystem.SetHandler(command);
 
@@ -38,8 +46,24 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+	   if(Input.GetMouseButtonDown(0)) //convert mouse input to keycodes
+        {
+            CommandSystem.Instance.HandleInput(KeyCode.Mouse0);
+        }
+        
         EnemyUpdate();
     }
+    
+    
+	void OnGUI() //currently used to update keybindings, no mouse support
+	{
+		Event e = Event.current;
+		if (e.isKey)
+		{
+           
+			CommandSystem.Instance.HandleInput(e.keyCode);
+		}
+	}
 
     void OnGUI()
     {
