@@ -69,7 +69,7 @@ public class EnemyPool
         return _spawnPoints[pointIndex];
     }
 
-    // Function that re-iterates till finding a random available enemy
+    // Function that is recursive till finding a random available enemy
     public void SpawnRandomFromPool(Vector3[] _spawnPoints, int _overflowPrevention)
     {
         _overflowPrevention++;
@@ -91,7 +91,7 @@ public class EnemyPool
         }
     }
 
-    // Also a re-iterating function that recieves a list of integers that are excluded from being picked at random in range
+    // Also a recursive function that recieves a list of integers that are excluded from being picked at random in range
     public int GetRandomExcluding(int _minInclusive, int _maxExclusive, List<int> _excludingIntegers)
     {
         int temp = Random.Range(_minInclusive, _maxExclusive);
