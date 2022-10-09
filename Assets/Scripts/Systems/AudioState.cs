@@ -51,7 +51,7 @@ public class AudioState : State<int>
             case "cow":
                 current = clipSong;
                 break;
-            case "cow-moo":
+            case "cowFinal":
                 current = Clipfinal;
                 break;
             default:

@@ -58,12 +58,12 @@ public class GameManager : MonoBehaviour
         if (Audiostate2.Finished)
         {
             AudioStateMachine.SetCurrentState(Audiostate3);
-            Audiostate.OnExit();
+            Audiostate2.OnExit();
         }
         if (Audiostate3.Finished)
         {
             AudioStateMachine.SetCurrentState(Audiostate);
-            Audiostate.OnExit();
+            Audiostate3.OnExit();
         }
         AudioStateMachine.Update();
         EnemyUpdate();
@@ -146,7 +146,7 @@ public class GameManager : MonoBehaviour
     {
         Audiostate = new AudioState(Audio, "cowReverbed", 0);
         Audiostate2 = new AudioState(Audio, "cow", 1);
-        Audiostate3 = new AudioState(Audio, "cowFinal", 1);
+        Audiostate3 = new AudioState(Audio, "cowFinal", 2);
         AudioStateMachine.AddState(Audiostate);
         AudioStateMachine.AddState(Audiostate2);
         AudioStateMachine.AddState(Audiostate3);

@@ -55,7 +55,6 @@ public class StateMachine<T>
 	{
 		if(Currentstate == _state)
 		{
-            Currentstate.OnExit();
             return;
 		}
 		if(Currentstate != null)
