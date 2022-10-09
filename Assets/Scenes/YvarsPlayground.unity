@@ -257,29 +257,24 @@ MonoBehaviour:
   playerHp: 500
   offscreenLocation: {x: -50, y: 0, z: 0}
   enemySpawnPoints:
-  - {x: -20, y: 0, z: 20}
-  - {x: -10, y: 0, z: 25}
-  - {x: 0, y: 0, z: 26.5}
-  - {x: 10, y: 0, z: 25}
-  - {x: 20, y: 0, z: 20}
+  - {x: 0, y: 0, z: 49.42}
+  - {x: 3.48, y: 0, z: 49.42}
+  - {x: 8.16, y: 0, z: 49.42}
+  - {x: -4.4, y: 0, z: 49.42}
+  - {x: -9.04, y: 0, z: 49.42}
   waves:
   - enemyTypeAndAmount:
     - enemyProperties: {fileID: 11400000, guid: e3d50284b77761740ab707e3a19d85cc, type: 2}
       amount: 1
   - enemyTypeAndAmount:
     - enemyProperties: {fileID: 11400000, guid: e3d50284b77761740ab707e3a19d85cc, type: 2}
-      amount: 5
-    - enemyProperties: {fileID: 11400000, guid: 4e3223cf05359764b9a9b267cd68e469, type: 2}
-      amount: 2
-  - enemyTypeAndAmount:
-    - enemyProperties: {fileID: 11400000, guid: e3d50284b77761740ab707e3a19d85cc, type: 2}
-      amount: 2
-    - enemyProperties: {fileID: 11400000, guid: 4e3223cf05359764b9a9b267cd68e469, type: 2}
-      amount: 3
+      amount: 10
     - enemyProperties: {fileID: 11400000, guid: 2650e8a29294931438641c97861b6f60, type: 2}
       amount: 3
+    - enemyProperties: {fileID: 11400000, guid: 4e3223cf05359764b9a9b267cd68e469, type: 2}
+      amount: 6
   currentWave: 0
-  endlessWaveRespawnDelay: 0
+  endlessWaveRespawnDelay: 0.999
 --- !u!4 &725707608
 Transform:
   m_ObjectHideFlags: 0

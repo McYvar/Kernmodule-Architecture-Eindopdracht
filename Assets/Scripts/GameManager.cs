@@ -67,6 +67,7 @@ public class GameManager : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
+        if (enemySpawnPoints.Length <= 0) return;
         foreach (Vector3 location in enemySpawnPoints)
         {
             Gizmos.DrawSphere(location, 0.3f);
