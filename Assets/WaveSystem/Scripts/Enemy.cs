@@ -61,6 +61,7 @@ public class Enemy
 
     public void TakeDamage(int _damage)
     {
+        Debug.Log("Ouch that hurts" + this.enemyObject.name);
         hp -= _damage;
     }
 
@@ -76,8 +77,9 @@ public class Enemy
     }
 
     // I don't know about this yet...
-    public bool CheckBulletInRange(Transform _bullet)
+    public bool CheckBulletInRange(Vector3 _bullet)
     {
-        return Vector3.Distance(enemyObject.transform.position, _bullet.position) < 1f;
+        Debug.Log(" bullet Range " + (Vector3.Distance(enemyObject.transform.position, _bullet) < 1f ).ToString());
+        return Vector3.Distance(enemyObject.transform.position, _bullet) < 1f;
     }
 }

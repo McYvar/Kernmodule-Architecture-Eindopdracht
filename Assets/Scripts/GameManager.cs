@@ -6,8 +6,9 @@ public class GameManager : MonoBehaviour
 	CommandSystem CommandSystem;
 	public GameObject actor;
 	
-    InputHandler InputSystem;
-    WASDCommands command = new WASDCommands();
+  //  InputHandler InputSystem;
+  //  WASDCommands command = new WASDCommands();
+
 
 
 
@@ -30,16 +31,13 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-       // CommandSystem = new CommandSystem(actor);
-        ICommand ComMsg = new PlayerCommand(actor.transform);
-        CommandSystem.Instance.SetHandler(ComMsg);
-        ICommand space = new keyTransformCommand(KeyCode.Space,Vector3.up, actor.transform);
-       CommandSystem.Instance.AddCommand(space, KeyCode.Space);
-        InputSystem = new InputHandler(actor);
-        InputSystem.SetHandler(command);
-
         enemyPool = new EnemyPool(waves, offscreenLocation);
         currentWave = 0;
+
+        ICommand ComMsg = new PlayerCommand(actor.transform,enemyPool);
+        CommandSystem.Instance.SetHandler(ComMsg);
+        ICommand space = new keyTransformCommand(KeyCode.Space, Vector3.up, actor.transform);
+        CommandSystem.Instance.AddCommand(space, KeyCode.Space);
     }
 
     // Update is called once per frame
@@ -51,15 +49,14 @@ public class GameManager : MonoBehaviour
         }
         
         EnemyUpdate();
+        CommandSystem.Instance.UpdateParticleCollision();
     }
     
-    
-	void OnGUI() //currently used to update keybindings, no mouse support
+    void OnGUI() //currently used to update keybindings, no mouse support
 	{
 		Event e = Event.current;
 		if (e.isKey)
-		{
-           
+		{ 
 			CommandSystem.Instance.HandleInput(e.keyCode);
 		}
 	}
@@ -75,7 +72,6 @@ public class GameManager : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(offscreenLocation, 0.3f);
     }
-
     private void EnemyUpdate()
     {
         bool canSpawnNewEnemies = true;
@@ -85,6 +81,14 @@ public class GameManager : MonoBehaviour
 
             // Temp till collision is implemented
             if (Input.GetKeyDown(KeyCode.Space)) enemy.TakeDamage(100);
+            //if (enemy.CheckBulletInRange())
+            //{
+            Debug.Log(enemy.enemyProperties.hp);
+            if(enemy.enemyProperties.hp <= 0)
+            {
+                enemy.enemyObject.active = false;
+            }
+            //}
             playerHp -= enemy.DealDamage(actor.transform);
         }
 
