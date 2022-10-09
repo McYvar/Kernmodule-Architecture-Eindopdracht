@@ -39,10 +39,10 @@ public class PlayerCommand:ICommand
         ICommand Dkey = new keyTransformCommand(KeyCode.D, Vector3.right,Owner);
         CommandSystem.Instance.AddCommand(Dkey, KeyCode.D);
 
-        ICommand Upkey = new keyQuaternionCommand(KeyCode.UpArrow, Owner, Vector3.up);
+        ICommand Upkey = new keyQuaternionCommand(KeyCode.UpArrow, Owner, Vector3.down);
         CommandSystem.Instance.AddCommand(Upkey, KeyCode.UpArrow);
 
-        ICommand Downkey = new keyQuaternionCommand(KeyCode.DownArrow, Owner, Vector3.down);
+        ICommand Downkey = new keyQuaternionCommand(KeyCode.DownArrow, Owner, Vector3.up);
         CommandSystem.Instance.AddCommand(Downkey, KeyCode.DownArrow);
 
         ICommand Leftkey = new keyQuaternionCommand(KeyCode.LeftArrow, Owner, Vector3.left);
@@ -123,7 +123,8 @@ public class keyQuaternionCommand : ICommand
                 if(item.name == "Cube") { }
                 else
                 {
-                    item.localRotation = Quaternion.AngleAxis(10 + CommandSystem.InputModifier, Direction) * item.localRotation;
+                    //item.localRotation = Quaternion.AngleAxis(10 + CommandSystem.InputModifier, Direction) * item.localRotation;
+                    item.rotation = item.rotation * Quaternion.FromToRotation(item.position, item.position + Direction);
                 }
             }
         }
