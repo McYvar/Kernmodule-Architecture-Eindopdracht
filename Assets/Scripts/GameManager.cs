@@ -11,10 +11,10 @@ public class GameManager : MonoBehaviour
     void Start()
     {
        // CommandSystem = new CommandSystem(actor);
-        Icommand ComMsg = new PlayerCommand(actor.transform);
+        ICommand ComMsg = new PlayerCommand(actor.transform);
         CommandSystem.Instance.SetHandler(ComMsg);
-        Icommand ComMsg2 = new keymashCommand();
-       CommandSystem.Instance.AddCommand(ComMsg2,KeyCode.S);
+        ICommand space = new keyTransformCommand(KeyCode.Space,Vector3.up, actor.transform);
+       CommandSystem.Instance.AddCommand(space, KeyCode.Space);
     }
 
     // Update is called once per frame

@@ -8,7 +8,7 @@ public class InputHandler
 	
 	WASDCommands Command = new WASDCommands();
 	ArrowCommands AltCommand = new ArrowCommands();
-	Icommand handler;
+	ICommand handler;
 	private GameObject Actor;
 	
 	public InputHandler()
@@ -41,7 +41,7 @@ public class InputHandler
 			AltCommand.Execute(Actor,_keyCode);
 		}
 	}
-	public void SetHandler(Icommand _Com)
+	public void SetHandler(ICommand _Com)
 	{
 		//handler = _Com;
 		if(_Com.GetType() == Command.GetType())

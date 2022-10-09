@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 	//declare a method for executing a command
-	public interface Icommand
+	public interface ICommand
 	{
 	void Execute();
     void Undo();

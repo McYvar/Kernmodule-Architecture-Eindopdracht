@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerCommand:Icommand
+public class PlayerCommand:ICommand
 {
-    Transform Owner;
-    Transform[] Udders;
-    List<Icommand> commandlist;
+    static Transform Owner;
+    readonly Transform[] Udders;
     public PlayerCommand(Transform _owner)
     {
         Owner = _owner;
@@ -16,38 +15,112 @@ public class PlayerCommand:Icommand
             Transform udder = Owner.GetChild(i);
             Udders[i] = udder;
         }
+        CommandDefine();
     }
     public PlayerCommand()
     {
-     
-    }
-    //public void ExecuteWithCommand(Icommand _package)
-    //{
-    //    if()
-    //}
-    public void Execute()
-    {
-        Debug.Log("implement feutures!");
-        
-    }
-    public void Undo()
-    {
-        Debug.Log("");
-    }
-}
-public class keymashCommand: Icommand
-    {
-    public void Execute()
-    {
-        Debug.Log("");
 
     }
+    private void CommandDefine()
+    {
+        ICommand Wkey = new keyTransformCommand(KeyCode.W,Vector3.forward, Owner);
+        CommandSystem.Instance.AddCommand(Wkey, KeyCode.W);
+        ICommand Akey = new keyTransformCommand(KeyCode.A, Vector3.left, Owner);
+        CommandSystem.Instance.AddCommand(Akey, KeyCode.A);
+        ICommand Skey = new keyTransformCommand(KeyCode.S, Vector3.back,Owner);
+        CommandSystem.Instance.AddCommand(Skey, KeyCode.S);
+        ICommand Dkey = new keyTransformCommand(KeyCode.D, Vector3.right,Owner);
+        CommandSystem.Instance.AddCommand(Dkey, KeyCode.D);
+
+        ICommand Upkey = new keyQuaternionCommand(KeyCode.UpArrow, Owner, Quaternion.AngleAxis(0f, Vector3.left));
+        CommandSystem.Instance.AddCommand(Upkey, KeyCode.UpArrow);
+
+        ICommand Downkey = new keyQuaternionCommand(KeyCode.DownArrow, Owner, Quaternion.AngleAxis(180f, Vector3.left));
+        CommandSystem.Instance.AddCommand(Downkey, KeyCode.DownArrow);
+
+        ICommand Leftkey = new keyQuaternionCommand(KeyCode.LeftArrow, Owner, Quaternion.AngleAxis(0f, Vector3.up));
+        CommandSystem.Instance.AddCommand(Leftkey, KeyCode.LeftArrow);
+    }
+
+    public void Execute()
+    {
+        //foreach (ICommand key in CommandSystem.Instance.getCommandbuffer().Values)
+        //{
+        //    key.Execute();
+        //}       
+    }
     public void Undo()
     {
         Debug.Log("");
     }
 }
-public class ArrowCommands : Icommand
+public class keyTransformCommand : ICommand
+{
+    KeyCode Mycode;
+    Vector3 Direction;
+    Transform Mytransform;
+    public keyTransformCommand(KeyCode _mycode,Vector3 _direction, Transform _transform)
+    {
+        Mycode = _mycode;
+        Direction = _direction;
+        Mytransform = _transform;
+    }
+
+    public void Execute()
+    {
+        if (Input.GetKeyDown(Mycode))
+        {
+            Mytransform.position += Direction;
+        }
+    }
+    public void Undo()
+    {
+        Debug.Log("No undo, yet...");
+    }
+}
+public class keyQuaternionCommand : ICommand
+{
+    KeyCode Mycode;
+    Quaternion Myquaternion;
+    Transform Mytransform;
+    public keyQuaternionCommand(KeyCode _mycode, Transform _Transform, Quaternion _Quaternion)
+    {
+        Mycode = _mycode;
+        Myquaternion = _Quaternion;
+        Mytransform = _Transform;
+    }
+
+    public void Execute()
+    {
+        if (Input.GetKeyDown(Mycode))
+        {
+            Debug.Log("rotate" + Mytransform.name);
+            foreach (Transform item in getChild())
+            {
+                if(item.name == "Cube") { }
+                else
+                {
+                    item.localRotation = Quaternion.RotateTowards(item.localRotation, Myquaternion, 5f);
+                }
+            }
+           // Quaternion.RotateTowards( Mytransform.rotation,Myquaternion, 1f);
+        }
+    }
+    public Transform[] getChild()
+    {
+        Transform[] Childcollection = new Transform [Mytransform.childCount];
+        for (int i = 0; i < Mytransform.childCount; i++)
+        {
+            Childcollection[i] = Mytransform.GetChild(i);
+        }
+        return Childcollection;
+    }
+    public void Undo()
+    {
+        Debug.Log("No undo, yet...");
+    }
+}
+public class ArrowCommands : ICommand
 {
     public void Execute()
     {
@@ -96,7 +169,7 @@ public class ArrowCommands : Icommand
     }
 }
 
-public class WASDCommands : Icommand
+public class WASDCommands : ICommand
 {
     public void Execute()
     {

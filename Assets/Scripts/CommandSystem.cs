@@ -4,23 +4,25 @@ using UnityEngine;
 //inspired on: https://sj-jason-liu.medium.com/game-design-pattern-command-pt-2-game-dev-series-137-f7c052304812
 public class CommandSystem
 {
-    PlayerCommand RefrenceType = new PlayerCommand();
-    Icommand handler;
+   // PlayerCommand RefrenceType = new PlayerCommand();
+    ICommand handler;
     //private GameObject Actor;
-
+    protected Dictionary<KeyCode, ICommand> CommandBuffer = new Dictionary<KeyCode, ICommand>();
     private static CommandSystem _instance = new CommandSystem();
     public static CommandSystem Instance
     {
         get { if (_instance == null) Debug.LogError("CommandSystem is NULL!"); return _instance; }
     }
-    private Dictionary<KeyCode,Icommand> _commandBuffer = new Dictionary<KeyCode,Icommand>();
-
+   
+    public Dictionary<KeyCode,ICommand> getCommandbuffer()
+    {
+        return CommandBuffer;
+    }
    
 
 	public CommandSystem()
 	{
         _instance = this;
-      
     }
 
 	public void HandleInput(KeyCode _keyCode)
@@ -43,9 +45,9 @@ public class CommandSystem
                 }
             }
         }
-        if(_commandBuffer.ContainsKey(_keyCode)) //if the commandbuffer knows the command execute that command
+        if(CommandBuffer.ContainsKey(_keyCode)) //if the commandbuffer knows the command execute that command
         {
-            _commandBuffer.GetValueOrDefault(_keyCode).Execute();
+            CommandBuffer.GetValueOrDefault(_keyCode).Execute();
         }
         //if (handler.Equals(RefrenceType))
         //{
@@ -64,18 +66,19 @@ public class CommandSystem
         //}
     }
 
-	public void SetHandler(Icommand _Com) //detect types of input and set handler when possible
+	public void SetHandler(ICommand _Com) //detect types of input and set handler when possible
 	{
-       // Debug.Log(_Com);
-      //  Debug.Log(playercommand.GetType());
-
-        if (_Com.GetType() == RefrenceType.GetType())
-		{
-			Debug.Log("Handler = player");
-            //needs check if value already exsists
-            AddCommand(_Com, KeyCode.A);
-			handler = (PlayerCommand) _Com;
-		}
+        handler = _Com;
+        // Debug.Log(_Com);
+        //  Debug.Log(playercommand.GetType());
+  //      var a = new PlayerCommand();
+  //      if (_Com.GetType() ==  a.GetType())
+		//{
+		//	Debug.Log("Handler = player");
+  //          //needs check if value already exsists
+  //          AddCommand(_Com, KeyCode.KeypadEnter);
+		//	handler = (PlayerCommand) _Com;
+		//}
         
         //extra inputs
         /*
@@ -86,8 +89,8 @@ public class CommandSystem
 		}
         */
     }
-    public void AddCommand(Icommand _command, KeyCode _keycode)
+    public void AddCommand(ICommand _command, KeyCode _keycode)
     {
-        _commandBuffer.Add(_keycode,_command);
+        CommandBuffer.Add(_keycode,_command);
     }
 }
