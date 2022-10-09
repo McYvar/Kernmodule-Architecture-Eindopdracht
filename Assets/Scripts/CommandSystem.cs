@@ -42,6 +42,7 @@ public class CommandSystem
             Debug.Log("handle player");
             handler.Execute();
         }
+
     }
     public void SetHandler(ICommand _Com) //detect types of input and set handler when possible
 	{

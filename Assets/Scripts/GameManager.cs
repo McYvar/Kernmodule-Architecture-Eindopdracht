@@ -3,11 +3,16 @@ using UnityEngine;
 using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
-	CommandSystem CommandSystem;
+    StateMachine<int> AudioStateMachine = new StateMachine<int>();
+    public CommandSystem CommandSystem;
 	public GameObject actor;
     public Slider Inputvisual;
     public Text Killcount;
+    public AudioSource Audio;
     public static int killcount = 0;
+    private AudioState Audiostate;
+    private AudioState Audiostate2;
+    private AudioState Audiostate3;
     [SerializeField] int playerHp; 
 
     // Enemy spawning stuff
@@ -27,7 +32,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        enemyPool = new EnemyPool(waves, offscreenLocation);
+        audiosetup();
+         enemyPool = new EnemyPool(waves, offscreenLocation);
         currentWave = 0;
 
         ICommand ComMsg = new PlayerCommand(actor.transform,enemyPool);
@@ -43,7 +49,23 @@ public class GameManager : MonoBehaviour
         {
             CommandSystem.Instance.HandleInput(KeyCode.Mouse0);
         }
-        
+      
+        if(Audiostate.Finished)
+        {
+            AudioStateMachine.SetCurrentState(Audiostate2);
+            Audiostate.OnExit();
+        }
+        if (Audiostate2.Finished)
+        {
+            AudioStateMachine.SetCurrentState(Audiostate3);
+            Audiostate2.OnExit();
+        }
+        if (Audiostate3.Finished)
+        {
+            AudioStateMachine.SetCurrentState(Audiostate);
+            Audiostate3.OnExit();
+        }
+        AudioStateMachine.Update();
         EnemyUpdate();
         CommandSystem.Instance.UpdateParticleCollision();
         UpdateGUI();
@@ -119,5 +141,15 @@ public class GameManager : MonoBehaviour
                 currentWave++;
             }
         }
+    }
+    void audiosetup()
+    {
+        Audiostate = new AudioState(Audio, "cowReverbed", 0);
+        Audiostate2 = new AudioState(Audio, "cow", 1);
+        Audiostate3 = new AudioState(Audio, "cowFinal", 2);
+        AudioStateMachine.AddState(Audiostate);
+        AudioStateMachine.AddState(Audiostate2);
+        AudioStateMachine.AddState(Audiostate3);
+        AudioStateMachine.SetCurrentState(Audiostate);
     }
 }
