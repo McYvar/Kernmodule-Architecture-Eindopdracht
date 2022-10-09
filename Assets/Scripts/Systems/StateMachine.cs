@@ -31,6 +31,10 @@ public class StateMachine<T>
 			}
 			else
 			{
+                if(states.ContainsValue(_state))
+                {
+
+                }
 				Debug.Log("error can not add 2 references of the same object to the machine");
 				//states.Add(_state.ID, _state);
 				return;
@@ -51,7 +55,8 @@ public class StateMachine<T>
 	{
 		if(Currentstate == _state)
 		{
-			return;
+            Currentstate.OnExit();
+            return;
 		}
 		if(Currentstate != null)
 		{

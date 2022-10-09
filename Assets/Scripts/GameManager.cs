@@ -10,6 +10,9 @@ public class GameManager : MonoBehaviour
     public Text Killcount;
     public AudioSource Audio;
     public static int killcount = 0;
+    private AudioState Audiostate;
+    private AudioState Audiostate2;
+    private AudioState Audiostate3;
     [SerializeField] int playerHp; 
 
     // Enemy spawning stuff
@@ -29,9 +32,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        AudioState state = new AudioState(Audio, "objectbehavior",0);
-        AudioStateMachine.AddState(state);
-        AudioStateMachine.SetCurrentState(state);
+        audiosetup();
          enemyPool = new EnemyPool(waves, offscreenLocation);
         currentWave = 0;
 
@@ -47,6 +48,22 @@ public class GameManager : MonoBehaviour
 	   if(Input.GetMouseButtonDown(0)) //convert mouse input to keycodes
         {
             CommandSystem.Instance.HandleInput(KeyCode.Mouse0);
+        }
+      
+        if(Audiostate.Finished)
+        {
+            AudioStateMachine.SetCurrentState(Audiostate2);
+            Audiostate.OnExit();
+        }
+        if (Audiostate2.Finished)
+        {
+            AudioStateMachine.SetCurrentState(Audiostate3);
+            Audiostate.OnExit();
+        }
+        if (Audiostate3.Finished)
+        {
+            AudioStateMachine.SetCurrentState(Audiostate);
+            Audiostate.OnExit();
         }
         AudioStateMachine.Update();
         EnemyUpdate();
@@ -124,5 +141,15 @@ public class GameManager : MonoBehaviour
                 currentWave++;
             }
         }
+    }
+    void audiosetup()
+    {
+        Audiostate = new AudioState(Audio, "cowReverbed", 0);
+        Audiostate2 = new AudioState(Audio, "cow", 1);
+        Audiostate3 = new AudioState(Audio, "cowFinal", 1);
+        AudioStateMachine.AddState(Audiostate);
+        AudioStateMachine.AddState(Audiostate2);
+        AudioStateMachine.AddState(Audiostate3);
+        AudioStateMachine.SetCurrentState(Audiostate);
     }
 }
