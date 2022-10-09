@@ -7,7 +7,6 @@ public class Enemy
 {
     [HideInInspector] public GameObject enemyObject;
     [HideInInspector] public SO_BaseEnemyProperties enemyProperties;
-    private Vector3 spawnPoint;
     private Vector3 offScreenLocation;
     private string name;
     private int damage;
@@ -36,7 +35,7 @@ public class Enemy
     }
 
     // Enemy behaviour() gets called every frame for each enemy
-    public bool behaviour(Transform _target)
+    public bool Behaviour(Transform _target)
     {
         if (!inUse())
         {

@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
         bool canSpawnNewEnemies = true;
         foreach (Enemy enemy in enemyPool.enemies)
         {
-            if (enemy.behaviour(actor.transform)) canSpawnNewEnemies = false;
+            if (enemy.Behaviour(actor.transform)) canSpawnNewEnemies = false;
 
             // Temp till collision is implemented
             if (Input.GetKeyDown(KeyCode.Space)) enemy.TakeDamage(100);

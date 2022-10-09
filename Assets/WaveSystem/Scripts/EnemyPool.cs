@@ -63,7 +63,7 @@ public class EnemyPool
         Debug.Log("no enemy was available");
     }
 
-    Vector3 SpawnPoint(Vector3[] _spawnPoints)
+    private Vector3 SpawnPoint(Vector3[] _spawnPoints)
     {
         int pointIndex = Random.Range(0, _spawnPoints.Length);
         return _spawnPoints[pointIndex];
@@ -92,7 +92,7 @@ public class EnemyPool
     }
 
     // Also a recursive function that recieves a list of integers that are excluded from being picked at random in range
-    public int GetRandomExcluding(int _minInclusive, int _maxExclusive, List<int> _excludingIntegers)
+    private int GetRandomExcluding(int _minInclusive, int _maxExclusive, List<int> _excludingIntegers)
     {
         int temp = Random.Range(_minInclusive, _maxExclusive);
         if (_excludingIntegers.Contains(temp))
