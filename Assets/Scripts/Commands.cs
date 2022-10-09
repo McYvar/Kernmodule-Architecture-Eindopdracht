@@ -39,14 +39,17 @@ public class PlayerCommand:ICommand
         ICommand Dkey = new keyTransformCommand(KeyCode.D, Vector3.right,Owner);
         CommandSystem.Instance.AddCommand(Dkey, KeyCode.D);
 
-        ICommand Upkey = new keyQuaternionCommand(KeyCode.UpArrow, Owner, Quaternion.AngleAxis(0f, Vector3.left));
+        ICommand Upkey = new keyQuaternionCommand(KeyCode.UpArrow, Owner, Vector3.up);
         CommandSystem.Instance.AddCommand(Upkey, KeyCode.UpArrow);
 
-        ICommand Downkey = new keyQuaternionCommand(KeyCode.DownArrow, Owner, Quaternion.AngleAxis(180f, Vector3.left));
+        ICommand Downkey = new keyQuaternionCommand(KeyCode.DownArrow, Owner, Vector3.down);
         CommandSystem.Instance.AddCommand(Downkey, KeyCode.DownArrow);
 
-        ICommand Leftkey = new keyQuaternionCommand(KeyCode.LeftArrow, Owner, Quaternion.AngleAxis(0f, Vector3.up));
+        ICommand Leftkey = new keyQuaternionCommand(KeyCode.LeftArrow, Owner, Vector3.left);
         CommandSystem.Instance.AddCommand(Leftkey, KeyCode.LeftArrow);
+
+        ICommand Rightkey = new keyQuaternionCommand(KeyCode.RightArrow, Owner,Vector3.right);
+        CommandSystem.Instance.AddCommand(Rightkey, KeyCode.RightArrow);
     }
     private void ParticleDefine()
     {
@@ -79,7 +82,6 @@ public class keyTransformCommand : ICommand
 {
     KeyCode Mycode;
     Vector3 Direction;
-    Vector3 Towards;
     Transform Mytransform;
     public keyTransformCommand(KeyCode _mycode,Vector3 _direction, Transform _transform)
     {
@@ -90,13 +92,8 @@ public class keyTransformCommand : ICommand
 
     public void Execute()
     {
+        Mytransform.position += Vector3.Lerp(Mytransform.position, Direction, 1f)* Time.deltaTime * (6 + CommandSystem.InputModifier);
        
-        if (Input.GetKeyDown(Mycode))
-        {
-            Mytransform.position = Vector3.MoveTowards(Mytransform.position, Towards, Time.deltaTime * 15);
-            //Mytransform.position += Direction;
-            Towards = Mytransform.position + Direction;
-        }
     }
     public void Undo()
     {
@@ -106,13 +103,13 @@ public class keyTransformCommand : ICommand
 //concrete implementation for cow udders
 public class keyQuaternionCommand : ICommand
 {
-    KeyCode Mycode;
-    Quaternion Myquaternion;
-    Transform Mytransform;
-    public keyQuaternionCommand(KeyCode _mycode, Transform _Transform, Quaternion _Quaternion)
+   private KeyCode Mycode;
+   private Vector3 Direction;
+   private Transform Mytransform;
+    public keyQuaternionCommand(KeyCode _mycode, Transform _Transform, Vector3 _Direction)
     {
         Mycode = _mycode;
-        Myquaternion = _Quaternion;
+        Direction = _Direction;
         Mytransform = _Transform;
     }
 
@@ -126,10 +123,9 @@ public class keyQuaternionCommand : ICommand
                 if(item.name == "Cube") { }
                 else
                 {
-                    item.localRotation = Quaternion.RotateTowards(item.localRotation, Myquaternion, 5f);
+                    item.localRotation = Quaternion.AngleAxis(10 + CommandSystem.InputModifier, Direction) * item.localRotation;
                 }
             }
-           // Quaternion.RotateTowards( Mytransform.rotation,Myquaternion, 1f);
         }
     }
     public Transform[] getChild()
@@ -148,8 +144,8 @@ public class keyQuaternionCommand : ICommand
 }
 public class ParticleCommand:ICommand
 {
-    ParticleSystem Particle;
-    Enemy[] Colliders;
+    private ParticleSystem Particle;
+    private Enemy[] Colliders;
     public List<ParticleCollisionEvent> collisionEvents;
     public ParticleCommand(EnemyPool _colliders,ParticleSystem _mySystem)
     {
@@ -183,6 +179,7 @@ public class ParticleCommand:ICommand
                     if (Colliders[j].enemyObject == rb.gameObject)
                     {
                         Colliders[j].TakeDamage(100);
+                        GameManager.killcount++;
                      //   if (Colliders[j].CheckBulletInRange(collisionEvents[i].normal)) { Colliders[j].TakeDamage(100); }
                     }
                 }

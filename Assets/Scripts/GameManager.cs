@@ -1,17 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
 	CommandSystem CommandSystem;
 	public GameObject actor;
-	
-  //  InputHandler InputSystem;
-  //  WASDCommands command = new WASDCommands();
-
-
-
-
+    public Slider Inputvisual;
+    public Text Killcount;
+    public static int killcount = 0;
     [SerializeField] int playerHp; 
 
     // Enemy spawning stuff
@@ -50,6 +46,7 @@ public class GameManager : MonoBehaviour
         
         EnemyUpdate();
         CommandSystem.Instance.UpdateParticleCollision();
+        UpdateGUI();
     }
     
     void OnGUI() //currently used to update keybindings, no mouse support
@@ -59,7 +56,19 @@ public class GameManager : MonoBehaviour
 		{ 
 			CommandSystem.Instance.HandleInput(e.keyCode);
 		}
-	}
+       
+
+    }
+    public void UpdateGUI()
+    {
+        Inputvisual.value = CommandSystem.InputCounter;
+        if (Inputvisual.value >= 100)
+        {
+            CommandSystem.InputModifier++;
+            CommandSystem.InputCounter = 0;
+        }
+        Killcount.text = killcount.ToString();
+    }
 
     private void OnDrawGizmos()
     {
@@ -84,11 +93,6 @@ public class GameManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space)) enemy.TakeDamage(100);
             //if (enemy.CheckBulletInRange())
             //{
-            Debug.Log(enemy.enemyProperties.hp);
-            if(enemy.enemyProperties.hp <= 0)
-            {
-                enemy.enemyObject.active = false;
-            }
             //}
             playerHp -= enemy.DealDamage(actor.transform);
         }
