@@ -1,11 +1,9 @@
 fileFormatVersion: 2
-guid: f4ac669b61181a24b9ad16cfa2f4a48c
+guid: 4fc4184a517c66b4982c881c88419d18
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences:
-  - actor: {instanceID: 0}
-  - scriptableEnemy1: {instanceID: 0}
+  defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
