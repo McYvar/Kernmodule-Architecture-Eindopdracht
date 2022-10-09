@@ -3,11 +3,12 @@ using UnityEngine;
 using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
-    StateMachine<int> EnvoirmentMachine = new StateMachine<int>();
+    StateMachine<int> AudioStateMachine = new StateMachine<int>();
     public CommandSystem CommandSystem;
 	public GameObject actor;
     public Slider Inputvisual;
     public Text Killcount;
+    public AudioSource Audio;
     public static int killcount = 0;
     [SerializeField] int playerHp; 
 
@@ -28,10 +29,10 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        State<int> state = new State<int>(0,"Wave1");
-        EnvoirmentMachine.AddState(state);
-       
-        enemyPool = new EnemyPool(waves, offscreenLocation);
+        AudioState state = new AudioState(Audio, "objectbehavior",0);
+        AudioStateMachine.AddState(state);
+        AudioStateMachine.SetCurrentState(state);
+         enemyPool = new EnemyPool(waves, offscreenLocation);
         currentWave = 0;
 
         ICommand ComMsg = new PlayerCommand(actor.transform,enemyPool);
@@ -47,8 +48,7 @@ public class GameManager : MonoBehaviour
         {
             CommandSystem.Instance.HandleInput(KeyCode.Mouse0);
         }
-        EnvoirmentMachine.Update();
-        
+        AudioStateMachine.Update();
         EnemyUpdate();
         CommandSystem.Instance.UpdateParticleCollision();
         UpdateGUI();
