@@ -180,7 +180,7 @@ public class ParticleCommand:ICommand
                     if (Colliders[j].enemyObject == rb.gameObject)
                     {
                         Colliders[j].TakeDamage(100);
-                        GameManager.killcount++;
+                        GameManager.killCount++;
                      //   if (Colliders[j].CheckBulletInRange(collisionEvents[i].normal)) { Colliders[j].TakeDamage(100); }
                     }
                 }

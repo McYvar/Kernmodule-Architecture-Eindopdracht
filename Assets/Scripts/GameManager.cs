@@ -1,95 +1,98 @@
 ﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
-    StateMachine<int> AudioStateMachine = new StateMachine<int>();
-    public CommandSystem CommandSystem;
-	public GameObject actor;
-    public Slider Inputvisual;
-    public Text Killcount;
-    public AudioSource Audio;
-    public static int killcount = 0;
-    private AudioState Audiostate;
-    private AudioState Audiostate2;
-    private AudioState Audiostate3;
-    [SerializeField] int playerHp; 
+    public CommandSystem commandSystem;
+    public GameObject actor;
+    public Slider inputvisual;
+    public Text onScreenKillCount;
+    public TMP_Text midScreenBigText;
+    public AudioSource audio;
+    public static int killCount = 0;
 
+    private StateMachine<int> audioStateMachine = new StateMachine<int>();
+    private AudioState audiostate;
+    private AudioState audiostate2;
+    private AudioState audiostate3;
+
+
+
+    [SerializeField] private int playerHp;
     // Enemy spawning stuff
     [Space(20), Header("Enemy management"), Space(5)]
-
-    [SerializeField] Vector3 offscreenLocation;
-    [SerializeField] Vector3[] enemySpawnPoints;
-
+    [SerializeField] private Vector3 offscreenLocation;
+    [Space(5), SerializeField] private Vector3[] enemySpawnPoints;
     private EnemyPool enemyPool;
-
-    [Space(5)]
-    public List<Waves> waves;
-    [SerializeField] private int currentWave;
+    [Space(5), SerializeField] private List<Waves> waves;
     private float endlessWaveRespawnTimer;
+    [SerializeField] private int currentWave;
     [SerializeField, Range(0, 1.3f)] private float endlessWaveRespawnDelay;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         audiosetup();
-         enemyPool = new EnemyPool(waves, offscreenLocation);
+        enemyPool = new EnemyPool(waves, offscreenLocation);
         currentWave = 0;
 
-        ICommand ComMsg = new PlayerCommand(actor.transform,enemyPool);
+        ICommand ComMsg = new PlayerCommand(actor.transform, enemyPool);
         CommandSystem.Instance.SetHandler(ComMsg);
         ICommand space = new keyTransformCommand(KeyCode.Space, Vector3.up, actor.transform);
         CommandSystem.Instance.AddCommand(space, KeyCode.Space);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-	   if(Input.GetMouseButtonDown(0)) //convert mouse input to keycodes
+        if (playerHp < 0)
+        {
+            midScreenBigText.text = "Game Over!";
+            return;
+        }
+
+        if (Input.GetMouseButtonDown(0)) //convert mouse input to keycodes
         {
             CommandSystem.Instance.HandleInput(KeyCode.Mouse0);
         }
-      
-        if(Audiostate.Finished)
+
+        if (audiostate.Finished)
         {
-            AudioStateMachine.SetCurrentState(Audiostate2);
-            Audiostate.OnExit();
+            audioStateMachine.SetCurrentState(audiostate2);
+            audiostate.OnExit();
         }
-        if (Audiostate2.Finished)
+        if (audiostate2.Finished)
         {
-            AudioStateMachine.SetCurrentState(Audiostate3);
-            Audiostate2.OnExit();
+            audioStateMachine.SetCurrentState(audiostate3);
+            audiostate2.OnExit();
         }
-        if (Audiostate3.Finished)
+        if (audiostate3.Finished)
         {
-            AudioStateMachine.SetCurrentState(Audiostate);
-            Audiostate3.OnExit();
+            audioStateMachine.SetCurrentState(audiostate);
+            audiostate3.OnExit();
         }
-        AudioStateMachine.Update();
+        audioStateMachine.Update();
         EnemyUpdate();
         CommandSystem.Instance.UpdateParticleCollision();
         UpdateGUI();
     }
-    
-    void OnGUI() //currently used to update keybindings, no mouse support
-	{
-		Event e = Event.current;
-		if (e.isKey)
-		{ 
-			CommandSystem.Instance.HandleInput(e.keyCode);
-		}
-       
 
+    private void OnGUI() //currently used to update keybindings, no mouse support
+    {
+        Event e = Event.current;
+        if (e.isKey)
+        {
+            CommandSystem.Instance.HandleInput(e.keyCode);
+        }
     }
     public void UpdateGUI()
     {
-        Inputvisual.value = CommandSystem.InputCounter;
-        if (Inputvisual.value >= 100)
+        inputvisual.value = CommandSystem.InputCounter;
+        if (inputvisual.value >= 100)
         {
             CommandSystem.InputModifier++;
             CommandSystem.InputCounter = 0;
         }
-        Killcount.text = killcount.ToString();
+        onScreenKillCount.text = killCount.ToString();
     }
 
     private void OnDrawGizmos()
@@ -111,11 +114,6 @@ public class GameManager : MonoBehaviour
         {
             if (enemy.Behaviour(actor.transform)) canSpawnNewEnemies = false;
 
-            // Temp till collision is implemented
-            if (Input.GetKeyDown(KeyCode.Space)) enemy.TakeDamage(100);
-            //if (enemy.CheckBulletInRange())
-            //{
-            //}
             playerHp -= enemy.DealDamage(actor.transform);
         }
 
@@ -142,14 +140,14 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    void audiosetup()
+    private void audiosetup()
     {
-        Audiostate = new AudioState(Audio, "cowReverbed", 0);
-        Audiostate2 = new AudioState(Audio, "cow", 1);
-        Audiostate3 = new AudioState(Audio, "cowFinal", 2);
-        AudioStateMachine.AddState(Audiostate);
-        AudioStateMachine.AddState(Audiostate2);
-        AudioStateMachine.AddState(Audiostate3);
-        AudioStateMachine.SetCurrentState(Audiostate);
+        audiostate = new AudioState(audio, "cowReverbed", 0);
+        audiostate2 = new AudioState(audio, "cow", 1);
+        audiostate3 = new AudioState(audio, "cowFinal", 2);
+        audioStateMachine.AddState(audiostate);
+        audioStateMachine.AddState(audiostate2);
+        audioStateMachine.AddState(audiostate3);
+        audioStateMachine.SetCurrentState(audiostate);
     }
 }
